@@ -8,9 +8,7 @@ import VueRouter from 'vue-router'
 
 import app from 'src/app'
 import auth from 'src/auth'
-import configRoutes from 'src/routes'
-
-new Vue({});
+import routes from 'src/routes'
 
 Vue.use(VueResource);
 Vue.use(VueRouter);
@@ -23,9 +21,26 @@ auth.checkAuth();
 export const router = new VueRouter({
     hashbang: false,
     history: true,
-    mode: 'html5'
+    mode: 'html5',
+    routes: routes
 });
 
-configRoutes(router);
+router.beforeEach(function(transition) {
+    if (transition.to.path === '/forbidden') {
+        router.app.authenticating = true;
+        setTimeout(() => {
+            router.app.authenticating = false;
+            alert('this route is forbidden by a global before hook');
+            transition.abort()
+        }, 3000)
+    } else {
+        transition.next()
+    }
+})
 
-router.start(Vue.extend(app), '#app');
+new Vue({
+    router,
+    render: function(createElement) {
+        createElement(app);
+    }
+}).$mount('#app');

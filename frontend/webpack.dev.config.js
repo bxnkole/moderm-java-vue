@@ -1,9 +1,9 @@
 'use strict';
 
-const path = require('path'),
-    webpack = require('webpack'),
-    baseConfig = require('./webpack.config.js'),
-    devConfig = Object.create(baseConfig);
+const path = require('path')
+const webpack = require('webpack')
+const baseConfig = require('./webpack.config.js')
+const devConfig = Object.create(baseConfig)
 
 devConfig.debug = true;
 devConfig.devtool = 'source-map';

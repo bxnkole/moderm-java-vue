@@ -1,9 +1,11 @@
 <template>
     <header-component></header-component>
-    <div class="container">
-        <router-view transition-mode="out-in"></router-view>
-    </div>
+        <div class="container">
+            <router-view transition-mode="out-in"></router-view>
+        </div>
     <footer-component></footer-component>
+</template>
+    
 </template>
 
 <script>

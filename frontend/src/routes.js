@@ -5,38 +5,13 @@ import SignUp from 'views/sign_up'
 import About from 'views/about'
 import PageNotFound from 'views/not_found'
 
-export default router => {
-    router.map({
-        '/': {
-            component: Home
-        },
-        '/secretQuote': {
-            component: SecretQuote
-        },
-        '/login': {
-            component: SignIn
-        },
-        '/signUp': {
-            component: SignUp
-        },
-        '/about': {
-            component: About
-        },
-        "*": {
-            component: PageNotFound
-        }
-    });
+const routes = [
+    { path: "/", component: Home },
+    { path: "/secretQuote", component: SecretQuote },
+    { path: "/login", component: SignIn },
+    { path: "/signUp", component: SignUp },
+    { path: "/about", component: About },
+    { path: "*", component: PageNotFound }
+]
 
-    router.beforeEach((transition) => {
-        if (transition.to.path === '/forbidden') {
-            router.app.authenticating = true;
-            setTimeout(() => {
-                router.app.authenticating = false;
-                alert('this route is forbidden by a global before hook');
-                transition.abort()
-            }, 3000)
-        } else {
-            transition.next()
-        }
-    })
-}
+export default routes

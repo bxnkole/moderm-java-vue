@@ -1,5 +1,6 @@
 package com.banks.modernjavavue.config;
 
+import com.banks.modernjavavue.filter.CorsFilter;
 import com.banks.modernjavavue.filter.JWTAuthenticationFilter;
 import com.banks.modernjavavue.filter.JWTLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -30,18 +32,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 csrf().disable().
 
                 authorizeRequests().
-                    antMatchers("/").permitAll().
-                    antMatchers("/favicon.ico").permitAll().
-                    antMatchers(HttpMethod.POST, "/api/user/login").permitAll().
-                    antMatchers(HttpMethod.POST, "/login").permitAll().
-                    anyRequest().fullyAuthenticated();
+                antMatchers("/").permitAll().
+                antMatchers("/favicon.ico").permitAll().
+                antMatchers(HttpMethod.POST, "/api/user/login").permitAll().
+                antMatchers(HttpMethod.POST, "/login").permitAll().
+                anyRequest().fullyAuthenticated()
 
-//                .and().
-//
-//                    addFilterBefore(new JWTLoginFilter("/api/user/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class).
-//                    addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .and().
+
+                addFilterBefore(new JWTLoginFilter("/api/user/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class).
+                addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class).
+                addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
